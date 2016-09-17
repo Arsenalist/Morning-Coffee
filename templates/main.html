@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>Raptors Republic - Morning Coffee</title>
+<meta charset="UTF-8">
+    <meta content='text/html; charset=UTF-8' name='Content-Type'/>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<script src="//getbootstrap.com/dist/js/bootstrap.min.js"></script>
+<script>
+    $(function() {
+  //      $('.collapse').collapse()
+        $( ".sortable" ).sortable();
+        $( ".sortable" ).disableSelection();
+        $("#toggle").click(function() {
+            var checkBoxes = $(".link-checkbox");
+            checkBoxes.prop("checked", !checkBoxes.prop("checked"));    
+        });
+    });
+</script>
+<style>
+.sortable .glyphicon-th-list {
+    font-size: 1.2em;
+}
+.sortable .glyphicon-th-list:hover {
+    cursor: move;    
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="row">
+<div class="col-md-9">
+<form action="/create-draft" method="post">
+<h4>Delicious Items</h4>
+<p>
+<input class="btn btn-primary" type="submit" value="Create Draft in Wordpress"/>
+</p>
+<div class="row">
+<div class="col-md-1" style="text-align:center">
+    <input checked type="checkbox" name="toggle" id="toggle"/>
+</div>
+<div class="col-md-11">
+</div>
+</div>
+<div class="sortable">
+{% for item in items %}
+<div class="row">
+<div class="col-md-1" style="text-align:center">
+    <input class="link-checkbox" type="checkbox" name="links" checked value="{{ item.id }}"/>
+</div>
+<div class="col-md-1">
+<span class="glyphicon glyphicon-th-list"></span>
+</div>
+<div class="col-md-10">
+    <p>
+    
+    <a href="{{item.url}}" target="_blank"><span class="glyphicon glyphicon-bookmark"></span></a>
+    <a data-target="#{{item.id}}" data-toggle="collapse" onclick="return false" href="#">{{item.title}}</a>
+    </p>
+    <div class="well collapse in" id="{{item.id}}">
+        {{item.description}}
+    </div>
+</div>
+</div>
+{% endfor %}
+</div>
+</form>
+</div>
+<div class="col-md-3">
+</div>
+</div>
+</div>
+
+</body>
+</html>
+
+

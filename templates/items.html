@@ -1,0 +1,6 @@
+{% for item in items %}
+<p><a onclick="ga('send', 'event', 'Morning Coffee Click', this.innerHTML, this.getAttribute('href')); return true;" rel="nofollow" href="{{item.url}}" target="_blank">{{item.title}}</a></p>
+{{item.get_embed()}}
+{{item.get_description()|safe}}
+{% endfor %}
+
