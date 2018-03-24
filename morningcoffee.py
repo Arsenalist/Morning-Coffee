@@ -11,42 +11,17 @@ from urlparse import urlparse
 from flask import request
 import base64
 import json
-
+import sys  
+import os
+reload(sys)  
+sys.setdefaultencoding('utf8')
 morningcoffee = Flask(__name__)
-morningcoffee.secret_key = "secretkey"
-config = {
-    'republic': {
-        'feed_url':'https://raptorsrepublic:password@api.pinboard.in/v1/posts/all?format=json&results=30&tag=RR',
-        'wordpress': {
-            'url': 'http://www.raptorsrepublic.com',
-            'username': 'Arsenalist',
-            'password': 'password',
-            'category_id': 978,
-            'author_id': 3
-        }
-    },
-     'bluejays': {
-        'feed_url': 'https://raptorsrepublic:password@api.pinboard.in/v1/posts/all?format=json&results=30&tag=BR',
-        'wordpress': {
-            'url': 'http://www.bluejaysrepublic.com',
-            'username': 'Arsenalist',
-            'password': 'password',
-            'category_id': 4,
-            'author_id': 2
-        }
-    },
-      'tfc': {
-        'feed_url': 'https://raptorsrepublic:password@api.pinboard.in/v1/posts/all?format=json&results=30&tag=TFC',
-        'wordpress': {
-            'url': 'http://www.tfcrepublic.com',
-            'username': 'Arsenalist',
-            'password': 'password',
-            'category_id': 2,
-            'author_id': 2
-        }
-    }
-}   
-
+config_file = os.getcwd() + "/config.json"
+f = open(config_file, "r")
+contents = f.read()
+print contents
+config = json.loads(contents)
+morningcoffee.secret_key = config["pinboard"]["secret_key"];
 
 class Item:
     def __init__(self, id, url, title, description):
@@ -105,7 +80,9 @@ def create_draft():
     post = WordPressPost()
     today = datetime.date.today()
     post.title = 'Morning Coffee - ' + today.strftime('%a, %b') + " " + today.strftime('%d').lstrip('0')
-    post.content = html.encode('utf-8')
+    #post.content = html.encode('utf-8')
+    post.content = html.encode('UTF-8')
+    #post.content = repr(html)
     client = Client( session['config']['wordpress']['url'] + "/xmlrpc.php", session['config']['wordpress']['username'], session['config']['wordpress']['password'])
 
     category = client.call(taxonomies.GetTerm('category', session['config']['wordpress']['category_id']))
@@ -114,7 +91,7 @@ def create_draft():
     #print user
     post.user = session['config']['wordpress']['author_id']
     post.comment_status = 'open'
-    post.id = client.call(posts.NewPost(post))
+    #post.id = client.call(posts.NewPost(post))
     return render_template('result.html', post=post, url=session['config']['wordpress']['url'])
 
    
@@ -129,8 +106,8 @@ def get_current_user():
 
 @morningcoffee.route("/")
 def home():
-    session['config'] = config[get_current_user()]
-    #session['config'] = config['republic']
+    #session['config'] = config[get_current_user()]
+    session['config'] = config['bluejays']
     items = wrap_into_items(delicious_items())
     return render_template('main.html', items=items)
 
