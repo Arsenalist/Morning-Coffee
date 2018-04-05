@@ -1,1 +1,1 @@
-web: python morningcoffee.py --log-file -
+web: python morningcoffee.py
