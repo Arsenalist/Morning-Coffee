@@ -7,21 +7,22 @@ from wordpress_xmlrpc.methods import posts, taxonomies, users
 import datetime
 import feedparser
 import hashlib
-from urlparse import urlparse
+from urllib.parse import urlparse
 from flask import request
 import base64
 import json
 import sys  
 import os
-reload(sys)  
-sys.setdefaultencoding('utf8')
 morningcoffee = Flask(__name__)
-config_file = os.getcwd() + "/config.json"
-f = open(config_file, "r")
-contents = f.read()
-print contents
-config = json.loads(contents)
-morningcoffee.secret_key = config["pinboard"]["secret_key"];
+config = None
+if os.environ.get('config') is None:
+    config_file = os.getcwd() + "/config.json"
+    contents = open(config_file, "r").read()
+    config = json.loads(contents)
+else:
+    config = json.loads(os.environ.get('config'))
+
+morningcoffee.secret_key = config["pinboard"]["secret_key"]
 
 class Item:
     def __init__(self, id, url, title, description):
@@ -60,7 +61,6 @@ def get_by_dt(dt, items):
 
 def wrap_into_items(delicious_items):
     items = []
-    print "right here"
     for fi in delicious_items:
         if ('feeds.del.icio.us' in session['config']['feed_url']):
             i = Item(fi['dt'], fi['u'], fi['d'], fi['n'])
@@ -81,7 +81,7 @@ def create_draft():
     today = datetime.date.today()
     post.title = 'Morning Coffee - ' + today.strftime('%a, %b') + " " + today.strftime('%d').lstrip('0')
     #post.content = html.encode('utf-8')
-    post.content = html.encode('UTF-8')
+    post.content = html #html.encode('UTF-8')
     #post.content = repr(html)
     client = Client( session['config']['wordpress']['url'] + "/xmlrpc.php", session['config']['wordpress']['username'], session['config']['wordpress']['password'])
 
