@@ -80,34 +80,25 @@ def create_draft():
     post = WordPressPost()
     today = datetime.date.today()
     post.title = 'Morning Coffee - ' + today.strftime('%a, %b') + " " + today.strftime('%d').lstrip('0')
-    #post.content = html.encode('utf-8')
-    post.content = html #html.encode('UTF-8')
-    #post.content = repr(html)
-    client = Client( session['config']['wordpress']['url'] + "/xmlrpc.php", session['config']['wordpress']['username'], session['config']['wordpress']['password'])
+    post.content = html
 
-    category = client.call(taxonomies.GetTerm('category', session['config']['wordpress']['category_id']))
-    post.terms.append(category)
-    #user = client.call(users.GetUser(3))
-    #print user
-    post.user = session['config']['wordpress']['author_id']
-    post.comment_status = 'open'
-    #post.id = client.call(posts.NewPost(post))
+    # client = Client( session['config']['wordpress']['url'] + "/xmlrpc.php", session['config']['wordpress']['username'], session['config']['wordpress']['password'])
+    # category = client.call(taxonomies.GetTerm('category', session['config']['wordpress']['category_id']))
+    # post.terms.append(category)
+    # post.user = session['config']['wordpress']['author_id']
+    # post.comment_status = 'open'
+    # post.id = client.call(posts.NewPost(post))
     return render_template('result.html', post=post, url=session['config']['wordpress']['url'])
 
    
 
 def get_current_user():
-    auth = request.headers.get('Authorization')
-    if (auth is None):
-        username = ""
-    else:
-        username = base64.b64decode(auth.split(" ")[1]).split(":")[0]
-    return username
+    # Just RR for now
+    return "republic"
 
 @morningcoffee.route("/")
 def home():
-    #session['config'] = config[get_current_user()]
-    session['config'] = config['bluejays']
+    session['config'] = config[get_current_user()]
     items = wrap_into_items(delicious_items())
     return render_template('main.html', items=items)
 
