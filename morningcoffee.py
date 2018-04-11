@@ -113,6 +113,6 @@ def home():
 
 
 if __name__ == "__main__":
-        morningcoffee.run(debug=True)
+        morningcoffee.run(debug=False, host='0.0.0.0')
 
 
