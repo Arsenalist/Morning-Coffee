@@ -144,13 +144,17 @@ def create_draft():
         } 
         transport = RequestsTransport(proxies)        
  
-    client = Client( session['config']['wordpress']['url'] + "/xmlrpc.php", session['config']['wordpress']['username'], session['config']['wordpress']['password'], 0, transport)
-    category = client.call(taxonomies.GetTerm('category', session['config']['wordpress']['category_id']))
-    post.terms.append(category)
-    post.user = session['config']['wordpress']['author_id']
-    post.comment_status = 'open'
-    post.id = client.call(posts.NewPost(post))
+    try:
+        client = Client( session['config']['wordpress']['url'] + "/xmlrpc.php", session['config']['wordpress']['username'], session['config']['wordpress']['password'], 0, transport)
+        category = client.call(taxonomies.GetTerm('category', session['config']['wordpress']['category_id']))
+        post.terms.append(category)
+        post.user = session['config']['wordpress']['author_id']
+        post.comment_status = 'open'
+        post.id = client.call(posts.NewPost(post))
+    except Exception:
+        print ("Posting failed")
     return render_template('result.html', post=post, url=session['config']['wordpress']['url'])
+    
 
    
 
