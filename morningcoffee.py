@@ -13,7 +13,61 @@ import base64
 import json
 import sys  
 import os
+import http.client
+import xmlrpc.client
+
+class RequestsTransport(xmlrpc.client.SafeTransport):
+    """
+    Drop in Transport for xmlrpclib that uses Requests instead of httplib
+    """
+    # change our user agent to reflect Requests
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+
+    def __init__(self, proxies=None, use_https=True, cert=None, verify=None, *args, **kwargs):
+        self.proxies = kwargs.get("proxies")
+        self.cert = cert
+        self.verify = verify
+        self.use_https = use_https
+        self.proxies = proxies
+        xmlrpc.client.SafeTransport.__init__(self, *args, **kwargs)
+
+    def request(self, host, handler, request_body, verbose):
+        """
+        Make an xmlrpc request.
+        """
+        headers = {'User-Agent': self.user_agent}
+        url = self._build_url(host, handler)
+        try:
+            resp = requests.post(url, data=request_body, headers=headers,
+                                 stream=True,
+                                 cert=self.cert, verify=self.verify, proxies=self.proxies)
+        except ValueError:
+            raise
+        except Exception:
+            raise  # something went wrong
+        else:
+            try:
+                resp.raise_for_status()
+            except requests.RequestException as e:
+                raise xmlrpc.client.ProtocolError(url, resp.status_code,
+                                              str(e), resp.headers)
+            else:
+                self.verbose = verbose
+                return self.parse_response(resp.raw)
+
+    def _build_url(self, host, handler):
+        """
+        Build a url for our request based on the host, handler and use_http
+        property
+        """
+        scheme = 'https' if self.use_https else 'http'
+        return '%s://%s/%s' % (scheme, host, handler)
+
+
+
 morningcoffee = Flask(__name__)
+
+
 config = None
 if os.environ.get('config') is None:
     config_file = os.getcwd() + "/config.json"
@@ -82,12 +136,20 @@ def create_draft():
     post.title = 'Morning Coffee - ' + today.strftime('%a, %b') + " " + today.strftime('%d').lstrip('0')
     post.content = html
 
-    # client = Client( session['config']['wordpress']['url'] + "/xmlrpc.php", session['config']['wordpress']['username'], session['config']['wordpress']['password'])
-    # category = client.call(taxonomies.GetTerm('category', session['config']['wordpress']['category_id']))
-    # post.terms.append(category)
-    # post.user = session['config']['wordpress']['author_id']
-    # post.comment_status = 'open'
-    # post.id = client.call(posts.NewPost(post))
+    transport = None
+    if os.environ.get('FIXIE_URL'):
+        proxies = {
+            "http"  : os.environ.get('FIXIE_URL', ''),
+            "https" : os.environ.get('FIXIE_URL', '')
+        } 
+        transport = RequestsTransport(proxies)        
+ 
+    client = Client( session['config']['wordpress']['url'] + "/xmlrpc.php", session['config']['wordpress']['username'], session['config']['wordpress']['password'], 0, transport)
+    category = client.call(taxonomies.GetTerm('category', session['config']['wordpress']['category_id']))
+    post.terms.append(category)
+    post.user = session['config']['wordpress']['author_id']
+    post.comment_status = 'open'
+    post.id = client.call(posts.NewPost(post))
     return render_template('result.html', post=post, url=session['config']['wordpress']['url'])
 
    
