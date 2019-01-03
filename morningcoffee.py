@@ -4,7 +4,7 @@ from flask import render_template, request, session
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import NewPost
 from wordpress_xmlrpc.methods import posts, taxonomies, users
-import datetime
+import datetime as dt
 import feedparser
 import hashlib
 from urllib.parse import urlparse
@@ -139,7 +139,7 @@ def create_draft():
         filtered_items.append(get_by_dt(s, items))
     html = render_template('items.html', items=filtered_items)
     post = WordPressPost()
-    today = datetime.date.today()
+    today = dt.date.today()
     post.title = 'Morning Coffee - ' + today.strftime('%a, %b') + " " + today.strftime('%d').lstrip('0')
     post.content = html
 
