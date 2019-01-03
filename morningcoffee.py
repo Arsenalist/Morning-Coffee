@@ -93,17 +93,19 @@ class Item:
         self.time = datez.astimezone(eastern)
 
     def get_embed(self):
-        o = urlparse(self.url)
         wordpress_supported_embeds = ['www.instagram.com', 'www.youtube.com', 'vine.co', 'twitter.com']
-        if o.hostname in wordpress_supported_embeds:
+        if self.get_domain() in wordpress_supported_embeds:
             return "\n\n" + self.url + "\n\n"
-        return ""
+        return None
 
     def get_description(self):
         if (self.description != None and self.description != ""):
             return "<blockquote>" + self.description + "</blockquote>"
         return ""
 
+    def get_domain(self):
+        o = urlparse(self.url)
+        return o.hostname
 
 def read_feed(url):
     d = feedparser.parse(url)

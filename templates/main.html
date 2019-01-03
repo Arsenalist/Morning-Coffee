@@ -70,13 +70,9 @@
 <div class="col-md-1">
 <span class="glyphicon glyphicon-th-list"></span>
 </div>
-<div class="col-md-1">
-<a href="{{item.url}}" target="_blank"><span class="glyphicon glyphicon-bookmark"></span></a>
-</div>
-
 <div class="col-md-9">
     <p>   
-    {{ item.time.strftime('%a %I:%M %p') }}<br/>     
+    <small>{{ item.time.strftime('%a %I:%M %p') }} - <a href="{{item.url}}" target="_blank">{{ item.get_domain() }}</a></small><br/>     
     <a data-target="#{{item.id}}" data-toggle="collapse" onclick="return false" href="#">{{item.title}}</a>
     </p>
     <div class="well collapse in" id="{{item.id}}">
