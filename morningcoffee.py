@@ -15,6 +15,8 @@ import sys
 import os
 import http.client
 import xmlrpc.client
+from datetime import datetime
+import pytz
 
 class RequestsTransport(xmlrpc.client.SafeTransport):
     """
@@ -79,11 +81,16 @@ else:
 morningcoffee.secret_key = config["pinboard"]["secret_key"]
 
 class Item:
-    def __init__(self, id, url, title, description):
+    def __init__(self, id, url, title, description, time):
         self.id = id
         self.url = url
         self.title = title
-        self.description = description
+        self.description = description # 2019-01-03T02:52:48Z
+        z = pytz.timezone('UTC')
+        eastern = pytz.timezone('US/Eastern')
+        time = datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ')
+        datez = z.localize(time)
+        self.time = datez.astimezone(eastern)
 
     def get_embed(self):
         o = urlparse(self.url)
@@ -119,7 +126,7 @@ def wrap_into_items(delicious_items):
         if ('feeds.del.icio.us' in session['config']['feed_url']):
             i = Item(fi['dt'], fi['u'], fi['d'], fi['n'])
         else:
-            i = Item(fi['hash'], fi['href'], fi['description'], fi['extended'])
+            i = Item(fi['hash'], fi['href'], fi['description'], fi['extended'], fi['time'])
         items.append(i)
     return items;
 

@@ -60,7 +60,8 @@
 </div>
 
 <div class="col-md-9">
-    <p>        
+    <p>   
+    {{ item.time.strftime('%a %I:%M %p') }}<br/>     
     <a data-target="#{{item.id}}" data-toggle="collapse" onclick="return false" href="#">{{item.title}}</a>
     </p>
     <div class="well collapse in" id="{{item.id}}">
