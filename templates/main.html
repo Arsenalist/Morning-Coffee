@@ -31,6 +31,11 @@
             });
             return false;
         });
+        $('.move-to-top').click(function(e) {
+            var detached = $(e.target).closest('div.row').detach();
+            $('div.sortable').prepend(detached);
+            return false;
+        });
     });
 </script>
 <style>
@@ -67,10 +72,13 @@
 <div class="col-md-1" style="text-align:center">
         <a href="#" class="uncheck-below-checkbox">Uncheck below</a>
 </div>    
+<div class="col-md-1" style="text-align:center">
+    <a href="#" class="move-to-top">Move to top</a>
+</div>    
 <div class="col-md-1">
 <span class="glyphicon glyphicon-th-list"></span>
 </div>
-<div class="col-md-9">
+<div class="col-md-8">
     <p>   
     <small>{{ item.time.strftime('%a %I:%M %p') }} - <a href="{{item.url}}" target="_blank">{{ item.get_domain() }}</a></small><br/>     
     <a data-target="#{{item.id}}" data-toggle="collapse" onclick="return false" href="#">{{item.title}}</a>
