@@ -19,9 +19,9 @@
             var checkBoxes = $(".link-checkbox");
             checkBoxes.prop("checked", !checkBoxes.prop("checked"));    
         });
-        $('.uncheck-below-checkbox').click(function(e) {
+        $('.uncheck-below').click(function(e) {
             var uncheck = false;
-            $('.uncheck-below-checkbox').each(function(i, elem) {
+            $('.uncheck-below').each(function(i, elem) {
                 if (uncheck) {
                     $(elem).closest('div.row').find('.link-checkbox').prop('checked', false);
                 }
@@ -70,7 +70,7 @@
     <input class="link-checkbox" type="checkbox" name="links" checked value="{{ item.id }}"/>
 </div>
 <div class="col-md-1" style="text-align:center">
-        <a href="#" class="uncheck-below-checkbox">Uncheck below</a>
+        <a href="#" class="uncheck-below">Uncheck below</a>
 </div>    
 <div class="col-md-1" style="text-align:center">
     <a href="#" class="move-to-top">Move to top</a>
