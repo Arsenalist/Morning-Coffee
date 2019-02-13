@@ -93,9 +93,17 @@ class Item:
         self.time = datez.astimezone(eastern)
 
     def get_embed(self):
+        # check for wordpress supported embeds
         wordpress_supported_embeds = ['www.instagram.com', 'www.youtube.com', 'vine.co', 'twitter.com']
         if self.get_domain() in wordpress_supported_embeds:
             return "\n\n" + self.url + "\n\n"
+
+        # check for images
+        extensions = ['.jpg', '.gif', '.png', '.bmp', '.jpeg']
+        for e in extensions:
+            if self.url.lower().endswith(e):
+                return '<img src="' + self.url + '">'
+
         return None
 
     def get_description(self):
