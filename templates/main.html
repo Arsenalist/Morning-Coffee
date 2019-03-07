@@ -31,6 +31,18 @@
             });
             return false;
         });
+        $('.check-above').click(function(e) {
+            var check = true;
+            $('.check-above').each(function(i, elem) {
+                if (check) {
+                    $(elem).closest('div.row').find('.link-checkbox').prop('checked', true);
+                }
+                if (e.target == elem) {
+                    check = false;
+                } 
+            });
+            return false;
+        });
         $('.move-to-top').click(function(e) {
             var detached = $(e.target).closest('div.row').detach();
             $('div.sortable').prepend(detached);
@@ -70,6 +82,9 @@
     <input class="link-checkbox" type="checkbox" name="links" checked value="{{ item.id }}"/>
 </div>
 <div class="col-md-1" style="text-align:center">
+    <a href="#" class="check-above">Check above</a>
+</div>    
+<div class="col-md-1" style="text-align:center">
         <a href="#" class="uncheck-below">Uncheck below</a>
 </div>    
 <div class="col-md-1" style="text-align:center">
@@ -78,7 +93,7 @@
 <div class="col-md-1">
 <span class="glyphicon glyphicon-th-list"></span>
 </div>
-<div class="col-md-8">
+<div class="col-md-7">
     <p>   
     <small>{{ item.time.strftime('%a %I:%M %p') }} - <a href="{{item.url}}" target="_blank">{{ item.get_domain() }}</a></small><br/>     
     <a data-target="#{{item.id}}" data-toggle="collapse" onclick="return false" href="#">{{item.title}}</a>
