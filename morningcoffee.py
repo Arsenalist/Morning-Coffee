@@ -17,6 +17,7 @@ import http.client
 import xmlrpc.client
 from datetime import datetime
 import pytz
+import md5
 
 class RequestsTransport(xmlrpc.client.SafeTransport):
     """
@@ -136,7 +137,8 @@ def wrap_into_items(delicious_items):
         if ('feeds.del.icio.us' in session['config']['feed_url']):
             i = Item(fi['dt'], fi['u'], fi['d'], fi['n'])
         else:
-            i = Item(fi['hash'], fi['href'], fi['description'], fi['extended'], fi['time'])
+            # i = Item(fi['hash'], fi['href'], fi['description'], fi['extended'], fi['time'])
+            i = Item(md5(fi['u']), fi['u'], fi['d'], fi['n'], fi['dt'])
         items.append(i)
     return items;
 
