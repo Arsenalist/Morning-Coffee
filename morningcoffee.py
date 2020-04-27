@@ -17,7 +17,7 @@ import http.client
 import xmlrpc.client
 from datetime import datetime
 import pytz
-import md5
+import hashlib
 
 class RequestsTransport(xmlrpc.client.SafeTransport):
     """
@@ -130,6 +130,11 @@ def get_by_dt(dt, items):
         if i.id == dt:
             return i
     return None
+
+def md5(str):
+    m = hashlib.md5()
+    m.update(str)
+    return m.hexdigest()
 
 def wrap_into_items(delicious_items):
     items = []
