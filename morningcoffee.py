@@ -133,7 +133,7 @@ def get_by_dt(dt, items):
 
 def md5(str):
     m = hashlib.md5()
-    m.update(str)
+    m.update(str.encode('utf-8'))
     return m.hexdigest()
 
 def wrap_into_items(delicious_items):
