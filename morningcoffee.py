@@ -122,7 +122,7 @@ def read_feed(url):
 
 def delicious_items():
     r = requests.get(session['config']['feed_url'])
-    items = r.json()
+    items = json.loads(r.text.encode('utf8')[3:].decode('utf8'))
     return items
 
 def get_by_dt(dt, items):
@@ -133,7 +133,7 @@ def get_by_dt(dt, items):
 
 def md5(str):
     m = hashlib.md5()
-    m.update(str.encode('utf-8'))
+    m.update(str.encode('utf-8-sig'))
     return m.hexdigest()
 
 def wrap_into_items(delicious_items):
