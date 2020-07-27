@@ -14,6 +14,7 @@ import json
 import sys  
 import os
 import http.client
+import codecs
 import xmlrpc.client
 from datetime import datetime
 import pytz
@@ -122,7 +123,7 @@ def read_feed(url):
 
 def delicious_items():
     r = requests.get(session['config']['feed_url'])
-    items = json.loads(r.text.encode('utf8')[3:].decode('utf8'))
+    items = r.json()
     return items
 
 def get_by_dt(dt, items):

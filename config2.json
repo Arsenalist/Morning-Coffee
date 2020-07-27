@@ -1,0 +1,68 @@
+{
+
+    "pinboard": {"secret_key": "O4328q0awaJ9wc65q977AjpIQA31xxAn"},
+
+    "republic": {
+
+        "feed_url":"https://feeds.pinboard.in/json/secret:24214b41f148aa70d901/u:raptorsrepublic/",
+
+        "wordpress": {
+
+            "url": "https://www.raptorsrepublic.com",
+
+            "username": "Arsenalist",
+
+            "password": "MesutOzil11!!",
+
+            "category_id": 978,
+
+            "author_id": 5
+
+        }
+
+    },
+
+     "bluejays": {
+
+        "feed_url": "https://raptorsrepublic:LinksF0rLife@api.pinboard.in/v1/posts/all?format=json&results=50&tag=BR",
+
+        "wordpress": {
+
+            "url": "http://www.bluejaysrepublic.com",
+
+            "username": "Arsenalist",
+
+            "password": "Arsenal14!$",
+
+            "category_id": 4,
+
+            "author_id": 2
+
+        }
+
+    },
+
+      "tfc": {
+
+        "feed_url": "https://raptorsrepublic:LinksF0rLife@api.pinboard.in/v1/posts/all?format=json&results=50&tag=TFC",
+
+        "wordpress": {
+
+            "url": "http://www.tfcrepublic.com",
+
+            "username": "Arsenalist",
+
+            "password": "Arsenal14!$",
+
+            "category_id": 2,
+
+            "author_id": 2
+
+        }
+
+    }
+
+}
+
+
+
