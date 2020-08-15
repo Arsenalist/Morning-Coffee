@@ -87,12 +87,9 @@ class Item:
         self.id = id
         self.url = url
         self.title = title
-        self.description = description # 2019-01-03T02:52:48Z
-        z = pytz.timezone('UTC')
-        eastern = pytz.timezone('US/Eastern')
-        time = datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ')
-        datez = z.localize(time)
-        self.time = datez.astimezone(eastern)
+        self.description = description
+        # 2020-08-15T11:05:33Z
+        self.time = datetime.strptime(time, '%Y-%m-%dT%H:%M:%SZ')
 
     def get_embed(self):
         # check for wordpress supported embeds
