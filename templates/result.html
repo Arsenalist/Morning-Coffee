@@ -5,7 +5,7 @@
    {% else %}
       <p>Copy-and-paste the below into Wordpress.</p>
    {% endif %}
-<input type="text" value="{{post.title}}" style="width:600px" onclick="this.select()"/>
+<input type="text" value="{{post.title.raw}}" style="width:600px" onclick="this.select()"/>
 <br/><br/>
-<textarea rows="20" cols="60" onclick="this.select()">{{post.content}}</textarea>
+<textarea rows="20" cols="60" onclick="this.select()">{{post.content.raw}}</textarea>
 
