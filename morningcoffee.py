@@ -80,13 +80,18 @@ def wrap_into_items(delicious_items):
 
 @morningcoffee.route("/create-draft", methods=['POST'])
 def create_draft():
+    print("1")
     items = wrap_into_items(delicious_items())
+    print("2")
     filtered_items = []
     selected = request.form.getlist('links')
+    print("3")
 
     for s in selected:
         filtered_items.append(get_by_dt(s, items))
+    print("4")
     html = render_template('items.html', items=filtered_items)
+    print("5")
     today = dt.date.today()
     title = 'Morning Coffee - ' + today.strftime('%a, %b') + " " + today.strftime('%d').lstrip('0')
     post = {
